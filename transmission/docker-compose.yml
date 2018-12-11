@@ -1,0 +1,11 @@
+version: "3"
+services:
+    transmission:
+      container_name: transmission
+      image: linuxserver/transmission:latest
+      volumes:
+        - c:/Code/docker/data/Transmission/config:/config
+        - c:/Code/docker/data/Transmission/download:/downloads
+      ports:
+        - "9091:9091"
+        - "51413:51413"

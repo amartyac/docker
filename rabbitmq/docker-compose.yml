@@ -1,0 +1,18 @@
+version: "3"
+services:
+    rabbitmq:
+        environment:
+            - "RABBITMQ_ERLANG_COOKIE=SWQOKODSQALRPCLNMEQQ"
+            - "RABBITMQ_DEFAULT_USER=appuser"
+            - "RABBITMQ_DEFAULT_PASS=Kw0m1UzK4x*"
+            - "RABBITMQ_DEFAULT_VHOST='/'"
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+        image: "rabbitmq:3.6-management-alpine"               
+        restart: always
+        hostname: local
+        volumes:
+            - rabbit-data:/var/lib/rabbitmq            
+volumes:
+    rabbit-data:
