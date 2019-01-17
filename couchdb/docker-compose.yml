@@ -1,0 +1,14 @@
+version: "3"
+services:
+    couchdb:
+        image: apache/couchdb:latest
+        restart: always
+        environment:
+            COUCHDB_PASSWORD: kwoat-svc
+            COUCHDB_USER: quote_svc            
+        ports:
+            - "5984:5984"
+        volumes:
+            - couchdb-data:/home/couchdb/data
+volumes:
+    couchdb-data:
