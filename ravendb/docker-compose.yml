@@ -1,0 +1,18 @@
+version: '3.1'
+services:
+  raven:
+    image: ravendb/ravendb-nightly:5.0-ubuntu-latest
+    container_name: raven
+    ports:
+      - 8081:8080
+      - 38881:38888
+    environment:
+      - RAVEN_ARGS=--Setup.Mode=None
+      - RAVEN_Logs_Mode=Information
+      - RAVEN_Security_UnsecuredAccessAllowed=PublicNetwork
+      - RAVEN_PublicServerUrl=http://raven1:8080
+      - RAVEN_PublicServerUrl_Tcp=tcp://raven1:38888
+      - RAVEN_License_Eula_Accepted=true
+    env_file: ./license.env
+      
+  
