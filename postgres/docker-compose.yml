@@ -4,9 +4,9 @@ services:
         image: postgres:13-alpine
         restart: always
         environment:
-            POSTGRES_PASSWORD: kwoat-svc
-            POSTGRES_USER: quote_svc
-            POSTGRES_DB: quote
+            POSTGRES_PASSWORD: postgrespassword
+            POSTGRES_USER: postgresuser
+            POSTGRES_DB: app
         ports:
             - "5432:5432"
         volumes:

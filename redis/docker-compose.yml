@@ -2,7 +2,7 @@ version: "3"
 services:
     redis:
         image: "redis:6.0.9-alpine"
-        command: redis-server --requirepass Cdk-0101 --appendonly yes
+        command: redis-server --requirepass app-2101 --appendonly yes
         restart: always
         ports:
             - "6379:6379"
