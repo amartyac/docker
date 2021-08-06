@@ -13,6 +13,13 @@ services:
         restart: always
         hostname: local
         volumes:
-            - rabbit-data:/var/lib/rabbitmq            
+            - rabbit-data:/var/lib/rabbitmq
+        networks:
+            - dev_backend
+
+networks:
+    dev_backend:
+        external: true
+
 volumes:
     rabbit-data:
