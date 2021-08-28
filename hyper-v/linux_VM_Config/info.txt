@@ -11,3 +11,6 @@ Set-VMProcessor -VMName <VMName> -ExposeVirtualizationExtensions $true
 
 To enable enhanced session mode in Linux:
 Set-VM -VMName <VMName>  -EnhancedSessionTransportType HvSocket
+
+If sound doesn't appear after setup in Linux, run:
+pulseaudio -k
