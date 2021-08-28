@@ -1,0 +1,13 @@
+MediaCreationTool21H1.exe /Eula Accept /Retail /MediaArch x64 /MediaLangCode en-US /MediaEdition Enterprise
+
+NPPR9-FWDCX-D2C8J-H872K-2YT43
+
+Never use Windows hello with VM in hyper v. Then enhanced mode doesn't work
+
+Windows 7 keys work
+
+To enable nested virtualization:
+Set-VMProcessor -VMName <VMName> -ExposeVirtualizationExtensions $true
+
+To enable enhanced session mode in Linux:
+Set-VM -VMName <VMName>  -EnhancedSessionTransportType HvSocket
