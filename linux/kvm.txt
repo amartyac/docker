@@ -5,3 +5,4 @@
 5. Few demos:
 	a. https://www.youtube.com/watch?v=ZqBJzrQy7Do
 	b. https://www.youtube.com/watch?v=2WDASJ0ye0A&t=525s
+6. Another good site explaining stuff: https://getlabsdone.com/install-windows-10-on-ubuntu-kvm/
