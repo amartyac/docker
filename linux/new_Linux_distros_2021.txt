@@ -1,7 +1,0 @@
-Pear OS Monterey : Has plasma desktop: mac os exp.. based of ubuntu -- Mac copy
-Cutefix OS: Built of Manjaro... chinese? Don't download!!!!!!!!!
-Rlx OS: Built from scratch... Uses Gnome.. Immutable system -- Very new.. Very fast.. but sound failed in kvm
-ArchCraft: based on arch: Very less minimal ram... No desktop.. Just window manager -- Not suitable for daily work
-Pop OS Cosmic: based on Ubuntu.. Simple design -- Already tried.. Very simple UI
-Solus 4.3: Independent like rlx..Looks simple -- Yet to mature. KDE desktop windows are transparent
-manjaro: Let me see whether it works in KVM
