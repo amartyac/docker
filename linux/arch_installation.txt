@@ -178,12 +178,13 @@ Some alternatives here:
 	
 2. https://www.youtube.com/watch?v=GE5qNANComM
 	a. cp -r /etc/xdg/openbox ~/.config -- Copy the openbox config files
-	b. sudo pacman -S obconf thunar thunar-archive-plugin tint2 xfce4-terminal nitrogen geany gnome-backgrounds menumaker unzip xarchiver lxappearance network-manager-applet 
+	b. sudo pacman -S obconf picom thunar thunar-archive-plugin tint2 xfce4-terminal nitrogen geany gnome-backgrounds menumaker unzip xarchiver lxappearance network-manager-applet 
 	c. wallpapers are under /usr/share/backgrounds/gnome
 	d. To autostart: in ~/.config/openbox/autostart file
 		i. tint2 &
 		ii. nitrogen --restore &
-		iii. VBoxClient-all # Virtualbox clipboard sharing
+		iii. VBoxClient-all & # Virtualbox clipboard sharing
+		iv. picom --experimental-backends & 
 	e. Configure menus: mmaker openbox -f -t <terminal>. In our case it is xfce4-terminal
 	f. Copy content of: https://gitlab.com/dwt1/dotfiles/-/tree/master/.config
 	g. Copy content of: https://gitlab.com/dwt1/dt-dark-theme/-/tree/master/openbox-3 to /usr/share/themes and also to openbox themes 
