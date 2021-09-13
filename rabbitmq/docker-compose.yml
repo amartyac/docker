@@ -9,7 +9,7 @@ services:
         ports:
             - "15672:15672"
             - "5672:5672"
-        image: "rabbitmq:3.6-management-alpine"               
+        image: "rabbitmq:3-management-alpine"               
         restart: always
         hostname: local
         volumes:
