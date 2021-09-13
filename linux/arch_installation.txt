@@ -1,0 +1,196 @@
+Archlinux installation (UEFI mode)
+-----------------------------------------------
+
+Pre-installation:
+1. Keyboard layout: (Don't need to do anything for US English)
+	a. Find layouts: find /usr/share/kbd/keymaps/ -type f | more
+	b. Load your layout: loadkeys be-latin1
+2. Verify boot mode: ls /sys/firmware/efi/efivars or efivar -l. If you get a bunch of lines, all is well.
+3. Connect to the internet: Should not be a problem in VirtualBox. 
+	a. Testing: ping -c 4 archlinux.org
+	b. To setup: Check https://arcolinux.com/connecting-to-the-internet-via-wifi-any-desktop/
+4. Update the system clock:
+	a. Check current time: date
+	b. Sync Date/Time. Don't tell timezone: timedatectl set-ntp true
+	c. Check time again. There should not be any difference: date
+5. Partition the disks:
+	a. Three partitions to be created: EFI, swap and root. We can create more if required
+	b. Tool used: cfdisk
+	c. Label: select gpt
+	d. If partitions are existing then we need to delete them before proceeding:
+		i. wipefs -a /dev/sda
+		ii. If it doesn't work: sgdisk -Z /dev/sda
+	e. You will be in free space disk image. Use arrow keys and press New
+	f. Type 550MB and press enter
+	g. Move to Type and select "EFI System"
+	h. Again select free space
+	i. Press New. Type the amount (rule of thumb 2x RAM)
+	j. Select Type as "Linux Swap"
+	k. Move to free space again
+	l. Press new. Take entire free space
+	m. Select Type and filesystem as "Linux Filesystem". This is generally selected by default
+	n. Move the selection to Write
+	o. Type yes and press enter
+	p. Type lsblk and now there will be 3 partitions
+6. Format partitions:
+	a. EFI partition: mkfs.fat -F32 /dev/sda1
+	b. Format Swap and activate:
+		i. mkswap /dev/sda2
+		ii. swapon /dev/sda2
+	c. Format root: mkfs.ext4 /dev/sda3
+7. Mount the filesystem:
+	a. Mount sda3(root) to /mnt: mount /dev/sda3 /mnt
+	b. Create /mnt/boot/efi and mount /dev/sda1
+		i. mkdir /mnt/boot
+		ii. mkdir /mnt/boot/efi
+		iii. mount /dev/sda1 /mnt/boot/efi
+
+Installation:
+1. Select the mirrors: We use nano. In nano use left shift and arrows to select lines (white background and black letters) and then delete those lines with left alt and delete button.
+	a. nano /etc/pacman.d/mirrorlist
+	b. Delete slow mirrors. Remember http mirrors are faster than ftp mirrors
+	c. Check list at: https://archlinux.org/mirrorlist/all/
+2. Install base and base-devel packages: pacstrap /mnt base base-devel linux linux-firmware nano
+3. Configuring the system: Fstab. Making linux know about partitions.
+	a. genfstab -U /mnt >> /mnt/etc/fstab
+	b. Should have 3 partitions: nano /mnt/etc/fstab
+4. Move inside new system and make changes. Command used chroot
+	a. arch-chroot /mnt
+5. Setting up timezone now:
+	a. ln -sf /usr/share/zoneinfo/RegionCity /etc/localtime
+	b. For India: ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
+	c. Set hardware clock to system clock: hwclock --systohc
+6. Setting locale:
+	a. nano /etc/locale.gen
+	b. delete comment (#) in front of en_US.UTF-8 and save the file
+	c. Generate locale: locale-gen
+	d. Setting Language:
+		i. echo LANG=en_US.UTF-8 > /etc/locale.conf
+		ii. If keyboard layout is changed in Pre-installation then setup: echo KEYMAP=<yourvalue> > /etc/vconsole.conf
+7. Hostname: 
+	a. echo archlinux > /etc/hostname. Here archlinx is the hostname
+	b. Edit /etc/hosts: nano /etc/hosts. Enter the lines:
+		i. 127.0.0.1	localhost
+		ii. ::1	        localhost
+		iii. 127.0.0.1	archlinux.localdomain	archlinux
+8. Network Configuration: Using the NetworkManager application. To set it up:
+	a. pacman -S networkmanager
+	b. systemctl enable NetworkManager (remember the case)
+9. InitRamfs: Is not mandatory and will not be created using mkinitcpio -p linux. (DON'T DO ANYTHING HERE)
+10. Root Password: passwd
+11. Boot Loader: To install grub to our system in order to be able to boot later on we need to pass these commands (you can add os-prober to the installation line if you multi-boot)
+	a. pacman -S grub efibootmgr
+	b. grub-install --target=x86_64-efi --efi-directory=/boot/efi
+	c. Make the grub configuration file: grub-mkconfig -o /boot/grub/grub.cfg
+12. Reboot:
+	a. exit #Move out of chroot
+	b. umount -R /mnt
+	c. reboot
+	d. And log back in with root as user and his/hers password.
+13. Reboot after shutdown in VirtualBox: Remember to remove iso image
+14. Boot from SSD or VirtualBox:
+	a. Login as root with the password you choose
+	b.  Confirm NetworkManager activated the internet with pacman -Syu
+15. Get AUR helpers (yay): (do this after creating personal account and logging as personal account)
+	a. Install git first: pacman -S git
+	b. git clone https://aur.archlinux.org/yay-bin.git
+	c. Make package: makepkg
+	d. Install: sudo pacman -U yay-bin...
+16. Install Multilib Repo: (Multilib repositories include applications such as wine and steam)
+	a. nano /etc/pacman.conf
+	b. Edit the pacman.conf to include the multilib repositories. Just delete the hashtag in front of the two lines
+	c. [multilib]
+	d. include = /etc/pacman.d/mirrorlist
+17. Install bash completion: Comfort package: pacman -S bash-completion
+18. Personal account: 
+	a. useradd -m -g users -G audio,video,network,wheel,storage,rfkill -s /bin/bash dev
+	b. passwd dev
+	c. Enable sudo for dev: 
+		i. EDITOR=nano visudo
+		ii. Look for this line of code and delete the hashtag in front of it: %wheel ALL=(ALL) ALL
+	d. Logout: exit
+19. Logging as personal account: I will login with dev and its password
+	a. Internet is activated thanks to networkmanager: Check using: sudo pacman -Syu
+
+Install graphical interface:
+Install display server --> Install graphics driver (not required for VirtualBox) --> Install display manager --> Install desktop environment (window manager)
+1. Install display server.. xorg: 
+	a. sudo pacman -S xorg xorg-xinit xterm virtualbox-guest-utils xf86-video-vmware
+	b. For virtualbox to take effect: sudo systemctl enable vboxservice.service
+2. Install graphics driver: (Not required for VirtualBox)
+	a. find out what hardware you have in your computer: lspci | grep -e VGA -e 3D
+	b. Install drivers as per vendor
+3. Install display manager: (LightDM)
+	a. sudo pacman -S lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings
+	b. sudo systemctl enable lightdm.service
+	c. DO NOT FORGET TO ENABLE LIGHTDM. DO NOT REBOOT UNTIL YOU HAVE A DESKTOP ENVIRONMENT
+4. Save this VM and close it.... In virtualbox we can clone from it and try various Destop Environments.
+--------------------------------------------------------------------------------------------------------------------------------------
+Install IceWM:
+1. Clone from previously saved VM
+2. We go to the TTY with Right-CTRL + F3. On bare metal: Ctrl + Alt + F3
+3. sudo pacman  -S icewm
+4. reboot and configure
+5. https://www.arcolinuxd.com/33-how-to-install-arch-linux-on-bios-and-install-icewm/
+
+IMPORTANT SCRIPTS ARE IN: https://github.com/arcolinuxd
+
+
+Intall Deepin:
+1. Clone from previously saved VM
+2. sudo pacman -S deepin
+3. sudo pacman -S deepin-extra4
+4. https://www.arcolinuxd.com/8-installation-of-deepin-on-arch-linux-phase-4/
+
+Install Openbox: Follow https://www.arcolinuxd.com/11-installation-of-openbox-on-arch-linux-phase-4/
+1. sudo pacman -S openbox
+2. sudo reboot
+Maybe the following steps:
+3. login and select xterm
+4. git clone https://github.com/arcolinuxd/arco-openbox
+5. git clone https://github.com/arcolinux/arcolinux-spices
+6. Go to folder arcolinux-spices/usr/share/arcolinux-spices/scripts
+7. ./get-the-keys-and-repos.sh
+8. Go to arco-openbox
+9. Run ./700-installing-fonts.sh
+10. Get openbox specific tools: ./500-software-distro-specific.sh
+Some alternatives here: 
+1. https://medium.com/hacker-toolbelt/install-and-configure-openbox-f326790bdb08
+	a. Windows Compositor: For some window decoration, 2D/3D effects, etc our system needs a windows compositor
+		i. sudo pacman -S compton
+		ii. nano ~/.config/openbox/autostart and add the following line: compton -b &
+		iii. logout and login
+	b. Dock: We’re going to use cairo-dock that is a panel, menu and applet container
+		i. sudo pacman -S cairo-dock cairo-dock-plug-ins
+		ii. nano ~/.config/openbox/autostart and add the following line: cairo-dock &
+	c. System monitor: One of the funs of having a lightweight system is showing off to other users. Let’s use conky for this and put in ‘autostart’
+		i. sudo pacman -S conky
+		ii. nano ~/.config/openbox/autostart and add the following line: conky -d -c ~/.config/conky/conky.conf &
+		iii. Conky is very versatile. Documentation: https://github.com/brndnmtthws/conky
+		iv. Edit ‘~/.config/conky/conky.conf’
+	d. Screensaver
+		i. sudo pacman -S xscreensaver xscreensaver-gl
+		ii. nano ~/.config/openbox/autostart and add: xscreensaver -no-splash &
+	e. Wallpaper
+		i. sudo pacman -S feh gnome-backgrounds
+		ii. feh — bg-scale /path/to/your/background/image.jpg
+		iii. Add the following line to ‘autostart’: eval `cat $HOME/.fehbg` &
+	
+2. https://www.youtube.com/watch?v=GE5qNANComM
+	a. cp -r /etc/xdg/openbox ~/.config -- Copy the openbox config files
+	b. sudo pacman -S obconf thunar thunar-archive-plugin tint2 xfce4-terminal nitrogen geany gnome-backgrounds menumaker unzip xarchiver lxappearance network-manager-applet 
+	c. wallpapers are under /usr/share/backgrounds/gnome
+	d. To autostart: in ~/.config/openbox/autostart file
+		i. tint2 &
+		ii. nitrogen --restore &
+		iii. VBoxClient-all # Virtualbox clipboard sharing
+	e. Configure menus: mmaker openbox -f -t <terminal>. In our case it is xfce4-terminal
+	f. Copy content of: https://gitlab.com/dwt1/dotfiles/-/tree/master/.config
+	g. Copy content of: https://gitlab.com/dwt1/dt-dark-theme/-/tree/master/openbox-3 to /usr/share/themes and also to openbox themes 
+
+	
+
+Install Awesome:
+1. sudo pacman -S awesome
+2. sudo pacman -S vicious
+3. https://www.arcolinuxd.com/13-installation-of-awesome-on-arch-linux-phase-4/
