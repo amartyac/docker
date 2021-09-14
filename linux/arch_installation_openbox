@@ -1,0 +1,71 @@
+ASSUMES WE ALREADY INSTALLED LIGHTDM PACKAGES
+Follow https://www.arcolinuxd.com/11-installation-of-openbox-on-arch-linux-phase-4/
+1. sudo pacman -S openbox
+2. sudo reboot
+Maybe the following steps:
+3. login and select xterm
+4. git clone https://github.com/arcolinuxd/arco-openbox
+5. git clone https://github.com/arcolinux/arcolinux-spices
+6. Go to folder arcolinux-spices/usr/share/arcolinux-spices/scripts
+7. ./get-the-keys-and-repos.sh
+8. Go to arco-openbox
+9. Run ./700-installing-fonts.sh
+10. Get openbox specific tools: ./500-software-distro-specific.sh
+Some alternatives here: 
+1. https://medium.com/hacker-toolbelt/install-and-configure-openbox-f326790bdb08
+	a. Windows Compositor: For some window decoration, 2D/3D effects, etc our system needs a windows compositor
+		i. sudo pacman -S compton
+		ii. nano ~/.config/openbox/autostart and add the following line: compton -b &
+		iii. logout and login
+	b. Dock: We’re going to use cairo-dock that is a panel, menu and applet container
+		i. sudo pacman -S cairo-dock cairo-dock-plug-ins
+		ii. nano ~/.config/openbox/autostart and add the following line: cairo-dock &
+	c. System monitor: One of the funs of having a lightweight system is showing off to other users. Let’s use conky for this and put in ‘autostart’
+		i. sudo pacman -S conky
+		ii. nano ~/.config/openbox/autostart and add the following line: conky -d -c ~/.config/conky/conky.conf &
+		iii. Conky is very versatile. Documentation: https://github.com/brndnmtthws/conky
+		iv. Edit ‘~/.config/conky/conky.conf’
+	d. Screensaver
+		i. sudo pacman -S xscreensaver xscreensaver-gl
+		ii. nano ~/.config/openbox/autostart and add: xscreensaver -no-splash &
+	e. Wallpaper
+		i. sudo pacman -S feh gnome-backgrounds
+		ii. feh — bg-scale /path/to/your/background/image.jpg
+		iii. Add the following line to ‘autostart’: eval `cat $HOME/.fehbg` &
+	
+2. https://www.youtube.com/watch?v=GE5qNANComM
+	a. cp -r /etc/xdg/openbox ~/.config -- Copy the openbox config files
+	b. sudo pacman -S obconf picom thunar thunar-archive-plugin tint2 xfce4-terminal nitrogen geany gnome-backgrounds menumaker unzip xarchiver lxappearance network-manager-applet 
+	c. wallpapers are under /usr/share/backgrounds/gnome
+	d. To autostart: in ~/.config/openbox/autostart file
+		i. tint2 &
+		ii. nitrogen --restore &
+		iii. VBoxClient-all & # Virtualbox clipboard sharing
+		iv. picom --experimental-backends & 
+	e. Configure menus: mmaker openbox -f -t <terminal>. In our case it is xfce4-terminal
+	f. Copy content of: https://gitlab.com/dwt1/dotfiles/-/tree/master/.config
+	g. Copy content of: https://gitlab.com/dwt1/dt-dark-theme/-/tree/master/openbox-3 to /usr/share/themes and also to openbox themes 
+
+Creating app launucher to tint2 in openbox:
+1. sudo touch /usr/share/applications/applaunch.desktop
+2. sudo nano /usr/share/applications/applaunch.desktop and enter the following:
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=AppLauncher
+Comment=Application Launcher
+Exec=xdotool key alt+shift+space
+Icon=<path to your icon>
+Terminal=false
+Categories=System;
+
+3. Open ~/.config/openbox/rc.xml
+4. go to keybind section and add this:
+<keybind key="A-S-space">
+	<action name="ShowMenu">
+		<menu>root-menu</menu>
+	</action>
+</keybind>
+
+5. Go to tint2 panel settings
+6. Edit theme -- go to launcher tab and move it
