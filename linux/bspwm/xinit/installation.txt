@@ -1,0 +1,51 @@
+ARCH INSTALLATION OF BSPWM ON XINIT
+-------------------------------------------------
+https://www.youtube.com/watch?v=PLBm0C5Gv58
+https://www.youtube.com/watch?v=7lLa4IoVdCo
+
+
+1. DO NOT INSTALL LIGHTDM
+2. sudo pacman -Syyu
+3. sudo pacman -S xorg-xinit bspwm sxhkd dmenu nitrogen picom xfce4-terminal pcmanfm
+4. yay -S google-chrome
+5. mkdir -p ~/.config/bspwm
+6. mkdir -p ~/.config/sxhkd
+7. cp /usr/share/doc/bspwm/examples/bspwmrc ~/.config/bspwm
+8. cp /usr/share/doc/bspwm/examples/sxhkdrc ~/.config/sxhkd
+9. nano ~/.config/sxhkd/sxhkdrc -- Change terminal from urxvt to xfce4-teerminal
+10. Save and exit
+11. Configure xinitrc:
+12. cp /etc/X11/xinit/xinitrc ~/.xinitrc
+13. nano ~/.xinitrc
+14. Replace lines from the end where we spawn programs like xterm, xclock etc.. Basically after the end of last if... replace with the contents indicated here in the sample .xinitrc file
+15. Disable a function in the compositor: sudo nano /etc/xdg/picom.conf and disable vsync. This is required for VM.. haven't tested it though
+16. Pull up browser and set background with nitrogen
+17. Remember to set the wallpaper otherwise nitrogen --restore doesn't work
+18. Terminal edit -- preferences:
+	a. Take away scroll bar
+	b. Add transparency
+	c. Remove menubar
+19. In bspwmrc.. we can set rule which desktop is for specific applications:
+	a. reduce desktops by removing numbers.. I to X... Sample script has 5
+	b. check sample file how we have done for google-chrome
+20. How to find class of an application?
+	a. Open your app
+	b. Open another terminal and type xprop
+	c. Select your application using mouse
+	d. In the terminal window you will see the window details
+	e. Take the WM_CLASS(STRING) and the 2nd variable there
+21. Setup polybar
+	a. yay -S polybar pacman-contrib ttf-font-awesome siji-git pulseaudio alsa-utils pavucontrol
+	b. We need to reboot for pulseaudio
+	c. For polybar put the sample files as included here.
+	d. It is a config file and a shell script.. Get the shell script from sample here or from polybar wiki
+	e. Restart UI
+22. Add volume and display information sxhkd
+23. Install lockscreen.. betterlockscreen
+	a. yay -S betterlockscreen
+	b. yay -S xdpyinfo xrandr bc feh
+	c. Get some picture using browser
+	d. betterlockscreen -u <Picture> --blur 1.0
+	e. betterlockscreen -l dimblur
+	f. key binding file.. check sxhkd
+
