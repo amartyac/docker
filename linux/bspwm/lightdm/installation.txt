@@ -1,0 +1,4 @@
+Almost similar to installation in xinitrc with the following differences:
+1. Don't install xorg-xinit
+2. Custom lines written in  ~/.xinitrc should be written in ~/.config/bspwm/bspwmrc after sxhk.. line
+3. Don't install betterlockscreen.. If required install light-locker
