@@ -28,7 +28,7 @@ hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
 # hc keybind $Mod-Return spawn "${TERMINAL:-xterm}" # use your $TERMINAL with xterm as fallback
 hc keybind $Mod-Return spawn "${TERMINAL:-xfce4-terminal}" # use your $TERMINAL with xfce4-terminal as fallback
-hc keybind $Mod-z spawn rofi -show drun -show-icons
+hc keybind $Mod-space spawn $HOME/.config/rofi/bin/launcher_misc
 
 # basic movement in tiling and floating mode
 # focusing clients
@@ -101,7 +101,7 @@ hc keybind $Mod-p pseudotile toggle
 # The following cycles through the available layouts within a frame, but skips
 # layouts, if the layout change wouldn't affect the actual window positions.
 # I.e. if there are two windows within a frame, the grid layout is skipped.
-hc keybind $Mod-space                                                           \
+hc keybind $Mod-z                                                           \
             or , and . compare tags.focus.curframe_wcount = 2                   \
                      . cycle_layout +1 vertical horizontal max vertical grid    \
                , cycle_layout +1
