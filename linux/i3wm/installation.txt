@@ -1,0 +1,14 @@
+Use xinit. To make startx run at startup after login automatically, put the following script in ~/.bash_profile:
+if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
+  exec startx
+fi
+
+
+Using aura package manager. This can be used as a replacement of yay and also pacman. Able to keep record of installations. This is added to base image.
+Reference: https://github.com/fosskers/aura
+Installation steps:
+git clone https://aur.archlinux.org/aura-bin.git
+cd aura-bin
+makepkg
+sudo pacman -U <the-package-file-that-makepkg-produces>
+
