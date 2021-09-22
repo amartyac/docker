@@ -1,0 +1,29 @@
+Use xinit. To make startx run at startup after login automatically, put the following script in ~/.bash_profile:
+if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
+  exec startx
+fi
+
+
+Using aura package manager. This can be used as a replacement of yay and also pacman. Able to keep record of installations. This is added to base image.
+Reference: https://github.com/fosskers/aura
+Installation steps:
+git clone https://aur.archlinux.org/aura-bin.git
+cd aura-bin
+makepkg
+sudo pacman -U <the-package-file-that-makepkg-produces>
+
+
+Install google-chrome: aura -S google-chrome
+
+Configure xinitrc:
+cp /etc/X11/xinit/xinitrc ~/.xinitrc
+nano ~/.xinitrc
+Replace lines from the end where we spawn programs like xterm, xclock etc.. Basically after the end of last if... replace with the contents indicated here in the sample .xinitrc file
+Disable a function in the compositor: sudo nano /etc/xdg/picom.conf and disable vsync. This is required for VM.. haven't tested it though
+Pull up browser and set background with nitrogen
+Remember to set the wallpaper otherwise nitrogen --restore doesn't work
+
+Install packages:
+sudo aura -S leftwm leftwm-theme-git nitrogen picom lxappearance xfce4-terminal rofi pcmanfm pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-equalizer playerctl alsa-utils  pacman-contrib openssh ttf-font-awesome geany network-manager-applet zip unzip xarchiver powerline gnome-keyring pacman-contrib acpi sysstat pavucontrol
+
+Go to ~/.config/leftwm/config.toml and change terminal to xfce4-terminal
