@@ -24,7 +24,7 @@ Pull up browser and set background with nitrogen
 Remember to set the wallpaper otherwise nitrogen --restore doesn't work
 
 Install packages:
-sudo aura -S leftwm leftwm-theme-git nitrogen picom lxappearance xfce4-terminal rofi pcmanfm pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-equalizer playerctl alsa-utils  pacman-contrib openssh ttf-font-awesome geany network-manager-applet zip unzip xarchiver powerline gnome-keyring pacman-contrib acpi sysstat pavucontrol
+sudo aura -S nitrogen picom lxappearance xfce4-terminal rofi pcmanfm pulseaudio pulseaudio-alsa pulseaudio-bluetooth pulseaudio-equalizer playerctl alsa-utils  pacman-contrib openssh ttf-font-awesome geany network-manager-applet zip unzip xarchiver powerline gnome-keyring pacman-contrib acpi sysstat pavucontrol
 sudo aura -A leftwm leftwm-theme-git
 
 Go to ~/.config/leftwm/config.toml and change terminal to xfce4-terminal
