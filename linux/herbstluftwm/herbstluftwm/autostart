@@ -10,10 +10,6 @@ hc emit_hook reload
 
 xsetroot -solid '#5A8E3A'
 
-# Amartya Custom Autostarts
-nitrogen --restore & # Add Wallpaper
-picom -f & # Transparency
-VBoxClient-all & # Resize screen automatically in virtualbox
 
 # remove all existing keybindings
 hc keyunbind --all
