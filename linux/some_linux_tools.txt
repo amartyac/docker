@@ -1,3 +1,0 @@
-Neofetch: gives information about distro
-BPytop: System monitor. cool one.. on console
-Fish: try this shell
